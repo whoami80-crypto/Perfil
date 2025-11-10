@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook - Chat Ly</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Helvetica, Arial, sans-serif;
+        }
+
+        :root {
+            --bg-primary: #18191a;
+            --bg-secondary: #242526;
+            --bg-third: #3a3b3c;
+            --text-primary: #e4e6eb;
+            --text-secondary: #b0b3b8;
+            --accent: #2374e1;
+            --divider: #3e4042;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--bg-secondary);
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--divider);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            color: var(--accent);
+            font-size: 40px;
+            margin-right: 10px;
+        }
+
+        .search-bar {
+            background-color: var(--bg-third);
+            border-radius: 50px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-bar i {
+            color: var(--text-secondary);
+            margin-right: 6px;
+        }
+
+        .search-bar input {
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 15px;
+            width: 240px;
+            color: var(--text-primary);
+        }
+
+        .header-center {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-icon {
+            width: 129px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            margin: 0 4px;
+            cursor: pointer;
+        }
+
+        .header-icon:hover {
+            background-color: var(--bg-third);
+        }
+
+        .header-icon.active {
+            border-bottom: 3px solid var(--accent);
+        }
+
+        .header-icon.active i {
+            color: var(--accent);
+        }
+
+        .header-icon i {
+            font-size: 24px;
+            color: var(--text-secondary);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--bg-third);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
+            cursor: pointer;
+        }
+
+        .profile-icon img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            margin-top: 56px;
+            padding: 20px 16px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Left Sidebar */
+        .left-sidebar {
+            width: 360px;
+            padding-right: 16px;
+            position: sticky;
+            top: 76px;
+            height: calc(100vh - 76px);
+            overflow-y: auto;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 2px;
+        }
+
+        .sidebar-item:hover {
+            background-color: var(--bg-third);
+        }
+
+        .sidebar-item img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+
+        .sidebar-item i {
+            font-size: 20px;
+            color: var(--accent);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--bg-third);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+        }
+
+        /* Profile Section */
+        .profile-container {
+            flex: 1;
+            max-width: 680px;
+        }
+
+        .cover-photo {
+            height: 350px;
+            background-color: var(--bg-third);
+            border-radius: 8px;
+            position: relative;
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+
+        .cover-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-info {
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .profile-picture {
+            width: 168px;
+            height: 168px;
+            border-radius: 50%;
+            border: 4px solid var(--bg-secondary);
+            position: absolute;
+            bottom: -84px;
+            left: 16px;
+            overflow: hidden;
+        }
+
+        .profile-picture img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-name {
+            margin-top: 90px;
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .profile-friends {
+            color: var(--text-secondary);
+            margin: 4px 0 16px;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .btn {
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+        }
+
+        .btn-secondary {
+            background-color: var(--bg-third);
+            color: var(--text-primary);
+            border: none;
+        }
+
+        .btn i {
+            margin-right: 6px;
+        }
+
+        /* Profile Navigation */
+        .profile-nav {
+            display: flex;
+            border-bottom: 1px solid var(--divider);
+            margin-bottom: 16px;
+        }
+
+        .nav-item {
+            padding: 16px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .nav-item.active {
+            color: var(--accent);
+        }
+
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: var(--accent);
+            border-radius: 3px 3px 0 0;
+        }
+
+        /* Stories Section */
+        .stories-section {
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+
+        .stories-container {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .story {
+            width: 120px;
+            height: 200px;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .story img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .story-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(transparent 60%, rgba(0, 0, 0, 0.6));
+        }
+
+        .story-user {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            color: white;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .create-story {
+            background-color: var(--bg-secondary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--divider);
+        }
+
+        .create-story i {
+            font-size: 24px;
+            color: var(--accent);
+            margin-bottom: 8px;
+        }
+
+        .create-story span {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Info Section */
+        .info-section {
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .info-item {
+            margin-bottom: 16px;
+        }
+
+        .info-label {
+            color: var(--text-secondary);
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            font-weight: 600;
+        }
+
+        .edit-details {
+            color: var(--accent);
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        /* Photos Section */
+        .photos-section {
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .photos-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .see-all-photos {
+            color: var(--accent);
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .photos-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+        }
+
+        .photo-item {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Create Post */
+        .create-post {
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .post-input {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .post-input img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .post-input input {
+            flex: 1;
+            background-color: var(--bg-third);
+            border: none;
+            border-radius: 20px;
+            padding: 12px;
+            font-size: 17px;
+            outline: none;
+            color: var(--text-primary);
+        }
+
+        .post-options {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid var(--divider);
+            padding-top: 12px;
+        }
+
+        .post-option {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .post-option:hover {
+            background-color: var(--bg-third);
+        }
+
+        .post-option i {
+            margin-right: 8px;
+            font-size: 20px;
+        }
+
+        .live-video i {
+            color: #f02849;
+        }
+
+        .photo-video i {
+            color: #45bd62;
+        }
+
+        .feeling-activity i {
+            color: #f7b928;
+        }
+
+        /* Posts */
+        .post {
+            background-color: var(--bg-secondary);
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+        }
+
+        .post-header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .post-user {
+            font-weight: 600;
+        }
+
+        .post-time {
+            color: var(--text-secondary);
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+        }
+
+        .post-time i {
+            margin-left: 4px;
+        }
+
+        .post-content {
+            padding: 0 16px 12px;
+        }
+
+        .post-text {
+            margin-bottom: 12px;
+        }
+
+        .post-image {
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .post-image img {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+        }
+
+        .post-stats {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--divider);
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: space-around;
+            padding: 4px 0;
+        }
+
+        .post-action {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .post-action:hover {
+            background-color: var(--bg-third);
+        }
+
+        .post-action i {
+            margin-right: 6px;
+            font-size: 18px;
+            color: var(--text-secondary);
+        }
+
+        /* Right Sidebar */
+        .right-sidebar {
+            width: 360px;
+            padding-left: 16px;
+            position: sticky;
+            top: 76px;
+            height: calc(100vh - 76px);
+            overflow-y: auto;
+        }
+
+        .contacts-header {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+        }
+
+        .contacts-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .contacts-actions i {
+            color: var(--text-secondary);
+            margin-left: 12px;
+            cursor: pointer;
+        }
+
+        .contact {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .contact:hover {
+            background-color: var(--bg-third);
+        }
+
+        .contact img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+
+        .contact-name {
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .left-sidebar, .right-sidebar {
+                display: none;
+            }
+            
+            .main-content {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-center {
+                display: none;
+            }
+            
+            .search-bar input {
+                width: 180px;
+            }
+            
+            .cover-photo {
+                height: 250px;
+            }
+            
+            .profile-picture {
+                width: 120px;
+                height: 120px;
+                bottom: -60px;
+            }
+            
+            .profile-name {
+                margin-top: 70px;
+                font-size: 24px;
+            }
+            
+            .profile-actions {
+                flex-direction: column;
+            }
+            
+            .nav-item {
+                padding: 12px 8px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-right .profile-icon:nth-child(2),
+            .header-right .profile-icon:nth-child(3) {
+                display: none;
+            }
+            
+            .search-bar input {
+                width: 140px;
+            }
+            
+            .cover-photo {
+                height: 200px;
+            }
+            
+            .profile-picture {
+                width: 100px;
+                height: 100px;
+                bottom: -50px;
+            }
+            
+            .profile-name {
+                margin-top: 60px;
+                font-size: 20px;
+            }
+            
+            .nav-item {
+                padding: 8px 4px;
+                font-size: 12px;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--bg-third);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-left">
+            <div class="logo">
+                <i class="fab fa-facebook"></i>
+            </div>
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Buscar en Facebook">
+            </div>
+        </div>
+        
+        <div class="header-center">
+            <div class="header-icon active">
+                <i class="fas fa-home"></i>
+            </div>
+            <div class="header-icon">
+                <i class="fab fa-facebook-messenger"></i>
+            </div>
+            <div class="header-icon">
+                <i class="fas fa-store"></i>
+            </div>
+            <div class="header-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="header-icon">
+                <i class="fas fa-gamepad"></i>
+            </div>
+        </div>
+        
+        <div class="header-right">
+            <div class="profile-icon">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="profile-icon">
+                <i class="fas fa-comment-dots"></i>
+            </div>
+            <div class="profile-icon">
+                <i class="fas fa-bell"></i>
+            </div>
+            <div class="profile-icon">
+                <i class="fas fa-caret-down"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Left Sidebar -->
+        <div class="left-sidebar">
+            <div class="sidebar-item">
+                <img src="https://i.pravatar.cc/150?img=5" alt="Usuario">
+                <span>Chat Ly</span>
+            </div>
+            <div class="sidebar-item">
+                <i class="fas fa-user-friends"></i>
+                <span>Amigos</span>
+            </div>
+            <div class="sidebar-item">
+                <i class="fas fa-play-circle"></i>
+                <span>Watch</span>
+            </div>
+            <div class="sidebar-item">
+                <i class="fas fa-store"></i>
+                <span>Marketplace</span>
+            </div>
+
+             <div class="sidebar-item">
+                <i class="fas fa-users"></i>
+                <span>Grupos</span>
+            </div>
+            <div class="sidebar-item">
+                <i class="fas fa-gamepad"></i>
+                <span>Juegos</span>
+            </div>
+            <div class="sidebar-item">
+                <i class="fas fa-calendar"></i>
+                <span>Eventos</span>
+            </div>
+            <div class="sidebar-item">
+                <i class="fas fa-briefcase"></i>
+                <span>Empleos</span>
+            </div>
+            <div class="sidebar-item">
+                <i class="fas fa-flag"></i>
+                <span>Páginas</span>
+            </div>
+            <div class="sidebar-item">
+                <i class="fas fa-star"></i>
+                <span>Favoritos</span>
+            </div>
+            <div class="sidebar-item">
+                <i class="fas fa-chevron-down"></i>
+                <span>Ver más</span>
+            </div>
+        </div>
+
+        <!-- Profile Content -->
+        <div class="profile-container">
+            <!-- Cover Photo -->
+            <div class="cover-photo">
+                <img src="https://images.unsplash.com/photo-1579546929662-711aa81148cf?ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80" alt="Foto de portada">
+                <div class="profile-picture">
+                    <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Foto de perfil de gato">
+                </div>
+            </div>
+
+            <!-- Profile Info -->
+            <div class="profile-info">
+                <div class="profile-name">Chat Ly</div>
+                <div class="profile-friends">456 amigos</div>
+                <div class="profile-actions">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Agregar a historia
+                    </button>
+                    <button class="btn btn-secondary">
+                        <i class="fas fa-edit"></i> Editar perfil
+                    </button>
+                </div>
+            </div>
+
+            <!-- Profile Navigation -->
+            <div class="profile-nav">
+                <div class="nav-item active">Publicaciones</div>
+                <div class="nav-item">Acerca de</div>
+                <div class="nav-item">Amigos</div>
+                <div class="nav-item">Fotos</div>
+                <div class="nav-item">Videos</div>
+                <div class="nav-item">Check-ins</div>
+                <div class="nav-item">Más</div>
+            </div>
+
+            <!-- Stories Section -->
+            <div class="stories-section">
+                <div class="section-title">Historias</div>
+                <div class="stories-container">
+                    <div class="story create-story">
+                        <i class="fas fa-plus"></i>
+                        <span>Crear historia</span>
+                    </div>
+                    <div class="story">
+                        <img src="https://images.unsplash.com/photo-1611605698335-8b1569810432?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" alt="Historia">
+                        <div class="story-overlay"></div>
+                        <div class="story-user">María</div>
+                    </div>
+                    <div class="story">
+                        <img src="https://images.unsplash.com/photo-1552058544-f2b08422138a?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" alt="Historia">
+                        <div class="story-overlay"></div>
+                        <div class="story-user">Carlos</div>
+                    </div>
+                    <div class="story">
+                        <img src="https://images.unsplash.com/photo-1543852786-1cf6624b9987?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" alt="Historia">
+                        <div class="story-overlay"></div>
+                        <div class="story-user">Ana</div>
+                    </div>
+                    <div class="story">
+                        <img src="https://images.unsplash.com/photo-1561948955-570b270e7c36?ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80" alt="Historia">
+                        <div class="story-overlay"></div>
+                        <div class="story-user">Pedro</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info Section -->
+            <div class="info-section">
+                <div class="section-title">Información</div>
+                <div class="info-item">
+                    <div class="info-label">Estudió en</div>
+                    <div class="info-value">Universidad Nacional</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Vive en</div>
+                    <div class="info-value">Ciudad, País</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">De</div>
+                    <div class="info-value">Ciudad de origen</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Siguiendo a</div>
+                    <div class="info-value">123 páginas</div>
+                </div>
+                <a href="#" class="edit-details">Editar detalles públicos</a>
+            </div>
+
+            <!-- Photos Section -->
+            <div class="photos-section">
+                <div class="photos-header">
+                    <div class="section-title">Fotos</div>
+                    <a href="#" class="see-all-photos">Ver todas las fotos</a>
+                </div>
+                <div class="photos-grid">
+                    <a href="#" class="photo-item">
+                        <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Foto de gato">
+                    </a>
+                    <a href="#" class="photo-item">
+                        <img src="https://images.unsplash.com/photo-1595433707802-6b2626ef1c91?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Foto">
+                    </a>
+                    <a href="#" class="photo-item">
+                        <img src="https://images.unsplash.com/photo-1574158622682-e40e69881006?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Foto">
+                    </a>
+                    <a href="#" class="photo-item">
+                        <img src="https://images.unsplash.com/photo-1548546738-8509cb246ed3?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Foto">
+                    </a>
+                    <a href="#" class="photo-item">
+                        <img src="https://images.unsplash.com/photo-1563482776068-4dac10f9373d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Foto">
+                    </a>
+                    <a href="#" class="photo-item">
+                        <img src="https://images.unsplash.com/photo-1533738363-b7f9aef128ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Foto">
+                    </a>
+                </div>
+            </div>
+
+                 <!-- Create Post -->
+            <div class="create-post">
+                <div class="post-input">
+                    <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Tu perfil">
+                    <input type="text" placeholder="¿Qué estás pensando, Chat Ly?">
+                </div>
+                <div class="post-options">
+                    <div class="post-option live-video">
+                        <i class="fas fa-video"></i>
+                        <span>Video en vivo</span>
+                    </div>
+                    <div class="post-option photo-video">
+                        <i class="fas fa-photo-video"></i>
+                        <span>Foto/video</span>
+                    </div>
+                    <div class="post-option feeling-activity">
+                        <i class="fas fa-laugh-beam"></i>
+                        <span>Sentimiento/actividad</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Posts -->
+            <div class="post">
+                <div class="post-header">
+                    <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Chat Ly">
+                    <div>
+                        <div class="post-user">Chat Ly</div>
+                        <div class="post-time">Ayer a las 18:30 <i class="fas fa-globe-americas"></i></div>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <div class="post-text">¡Hola a todos! Hoy es un día especial. Acabo de adoptar a este hermoso gatito. ¡Estoy muy feliz! 😻</div>
+                    <div class="post-image">
+                        <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Mi nuevo gatito">
+                    </div>
+                </div>
+                <div class="post-stats">
+                    <div>245 Me gusta</div>
+                    <div>36 comentarios</div>
+                </div>
+                <div class="post-actions">
+                    <div class="post-action">
+                        <i class="far fa-thumbs-up"></i>
+                        <span>Me gusta</span>
+                    </div>
+                    <div class="post-action">
+                        <i class="far fa-comment"></i>
+                        <span>Comentar</span>
+                    </div>
+                    <div class="post-action">
+                        <i class="fas fa-share"></i>
+                        <span>Compartir</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post">
+                <div class="post-header">
+                    <img src="https://i.pravatar.cc/150?img=5" alt="Amiga">
+                    <div>
+                        <div class="post-user">María González</div>
+                        <div class="post-time">Hoy a las 10:15 <i class="fas fa-globe-americas"></i></div>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <div class="post-text">¡Qué bonito día! Disfrutando del sol en el parque 🌞</div>
+                    <div class="post-image">
+                        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Publicación">
+                    </div>
+                </div>
+                <div class="post-stats">
+                    <div>125 Me gusta</div>
+                    <div>23 comentarios</div>
+                </div>
+                <div class="post-actions">
+                    <div class="post-action">
+                        <i class="far fa-thumbs-up"></i>
+                        <span>Me gusta</span>
+                    </div>
+                    <div class="post-action">
+                        <i class="far fa-comment"></i>
+                        <span>Comentar</span>
+                    </div>
+                    <div class="post-action">
+                        <i class="fas fa-share"></i>
+                        <span>Compartir</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="right-sidebar">
+            <div class="contacts-header">
+                <div class="contacts-title">Contactos</div>
+                <div class="contacts-actions">
+                    <i class="fas fa-video"></i>
+                    <i class="fas fa-search"></i>
+                    <i class="fas fa-ellipsis-h"></i>
+                </div>
+            </div>
+            <div class="contact">
+                <img src="https://i.pravatar.cc/150?img=33" alt="Contacto">
+                <span class="contact-name">Ana Martínez</span>
+            </div>
+            <div class="contact">
+                <img src="https://i.pravatar.cc/150?img=45" alt="Contacto">
+                <span class="contact-name">Pedro Sánchez</span>
+            </div>
+            <div class="contact">
+                <img src="https://i.pravatar.cc/150?img=68" alt="Contacto">
+                <span class="contact-name">Laura Rodríguez</span>
+            </div>
+            <div class="contact">
+                <img src="https://i.pravatar.cc/150?img=12" alt="Contacto">
+                <span class="contact-name">Javier Pérez</span>
+            </div>
+            <div class="contact">
+                <img src="https://i.pravatar.cc/150?img=55" alt="Contacto">
+                <span class="contact-name">Carmen García</span>
+            </div>
+            <div class="contact">
+                <img src="https://i.pravatar.cc/150?img=67" alt="Contacto">
+                <span class="contact-name">Miguel Fernández</span>
+            </div>
+        </div>
+    </div>
+
+
+
+   <script>
+        // Script para manejar la interacción de los botones de like
+        document.querySelectorAll('.post-action').forEach(action => {
+            action.addEventListener('click', function() {
+                if (this.querySelector('i').classList.contains('far')) {
+                    this.querySelector('i').classList.replace('far', 'fas');
+                    this.querySelector('i').style.color = '#2374e1';
+                } else {
+                    this.querySelector('i').classList.replace('fas', 'far');
+                    this.querySelector('i').style.color = '#b0b3b8';
+                }
+            });
+        });
+
+        // Script para manejar la navegación del perfil
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(i => {
+                    i.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
